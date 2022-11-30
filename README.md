@@ -1,6 +1,8 @@
 # 朴刀 podao
 一个 Python 项目搭建脚手架，组合使用 pyenv、venv 和 pip 等工具搭建虚拟环境、分组依赖包。
+
 Podao is an python project environment setup tool, it combines pyenv, venv, pip to ease the work to build an isolated environment for python project.
+
 
 
 
@@ -8,8 +10,11 @@ Podao is an python project environment setup tool, it combines pyenv, venv, pip 
 
 
 朴刀是一种刀身窄长、刀柄较短的刀，装上“杆棒”后变为枪，名为朴刀枪，以“搠、刺”为主。
+
 朴刀在《水浒传》里广为人知，印象里朴刀都很长，这是错的,正确的定义是，朴刀短柄，柄中空，是单手持握的短兵器，特点在于刀柄中空，旋入一根哨棒就可以当做长兵器使用，故尔武松等人都习惯手持哨棒，腰配朴刀，如此两件兵器可以在需要时合二为一。
+
 如：“卢俊义取出朴刀，装在杆棒上，三个了丫儿扣牢了，赶著车子奔梁山泊路上来”，“武松握着朴刀，向玉兰心窝里搠着，两个小的，亦被武松搠死，一朴刀一个，结果了”。
+
 
 
 
@@ -20,8 +25,10 @@ Podao is an python project environment setup tool, it combines pyenv, venv, pip 
 
 
 
+
 ### 局限 weakness
 podao 只解决虚拟环境的搭建和依赖包的分组的问题，更具体的项目配置需要手动更改 pyproject.toml 文件。
+
 
 
 
@@ -98,3 +105,9 @@ pd freeze -g pdf
 
 #### pip install -r requirements.txt
 将通过 requirements.txt 文件定义的虚拟环境快照按照到当前环境。
+
+
+
+
+### License
+[MIT](LICENSE) © Li zhigang
