@@ -1,0 +1,116 @@
+[build-system]
+requires = ['setuptools']
+build-backend = 'setuptools.build_meta'
+
+[project]
+name = 'podao'
+version = '0.8.1'
+description = 'A python project environment build tool.'
+readme = 'README.md'
+requires-python = '>=3.10'
+license = {text = 'MIT License'}
+authors = [
+    {name='Li zhigang', email='imlzg@126.com'},
+]
+keywords = [
+    'environment',
+    'dependency',
+    'workflow'
+]
+classifiers = [
+    'Development Status :: 5 - Production/Stable',
+
+    'Intended Audience :: Developers',
+    'Topic :: Software Development :: Build Tools',
+
+    'License :: OSI Approved :: MIT License',
+
+    'Operating System :: OS Independent',
+    'Programming Language :: Python',
+    'Programming Language :: Python :: 3 :: Only',
+    'Programming Language :: Python :: 3.10',
+    'Programming Language :: Python :: 3.11'
+]
+dependencies = [
+    'pip',
+    'sh',
+    'click',
+    'tomlkit',
+    'packaging',
+]
+
+[project.optional-dependencies]
+dev = [
+    'black',
+    'isort',
+    'pytest',
+    'pytest-depends'
+]
+
+[project.scripts]
+pd = 'podao.cli:pd'
+
+
+[project.urls]
+'Homepage' = 'https://github.com/liangshanpo/podao'
+'Bug Tracker' = 'https://github.com/liangshanpo/podao/issues'
+
+[tool.pytest.ini_options]
+addopts = '-ra -q'
+testpaths = ['test']
+norecursedirs = [
+    '.*',
+    'build',
+    'dist',
+    'CVS',
+    '_darcs',
+    '{arch}',
+    '*.egg',
+    'vendor',
+    'patched',
+    'news',
+    'tasks',
+    'docs',
+    'test/test_artifacts',
+    'test/pytest-pypi',
+    'test/pypi',
+    'peeps',
+]
+
+
+[tool.black]
+line-length = 90
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.eggs
+    | \.git
+    | \.github
+    | \.hg
+    | \.mypy_cache
+    | \.tox
+    | \.pyre_configuration
+    | \.venv
+    | _build
+    | buck-out
+    | build
+    | dist
+    | pipenv/vendor
+    | pipenv/patched
+    | test/pypi
+    | test/pytest-pypi
+    | test/test_artifacts
+    | get-pipenv.py
+    | pyproject.toml
+)/
+'''
+
+[tool.isort]
+atomic = true
+lines_after_imports = 2
+lines_between_types = 1
+multi_line_output = 5
+line_length = 80
+known_first_party = [
+    'test'
+]
