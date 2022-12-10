@@ -25,6 +25,9 @@ from podao.constant import (
     SRC_DIR,
     TEST_DIR,
     VERSION_REGEX,
+    VSCODE_DIR,
+    VSCODE_FILE,
+    VSCODE_TPL,
 )
 from podao.util import atomic_write, create_dir, singleton
 
@@ -54,16 +57,28 @@ class Project:
         else:
             config = tomlkit.loads(PYPROJECT_TPL)
 
-        if 'build-system' not in config:
-            config.add('build-system', tomlkit.table())  ## TODO add setuptools
-        if 'project' not in config:
-            config.add('project', tomlkit.table())
-        if 'name' not in config['project']:
+        if not (
+            config.get('build-system', None) and isinstance(config['build-system'], dict)
+        ):
+            config['build-system'] = tomlkit.table()
+            config['build-system']['requires'] = ['setuptools']
+            config['build-system']['build-backend'] = 'setuptools.build_meta'
+
+        if not (config.get('project', None) and isinstance(config['project'], dict)):
+            config['project'] = tomlkit.table()
+
+        if not config['project'].get('name', None):
             config['project']['name'] = os.path.basename(self.root)
-        if 'authors' not in config['project']:
-            config['project']['authors'] = [{'name': getpass.getuser(), 'email': ''}]
-        if 'optional-dependencies' not in config['project']:
-            config['project'].add('optional-dependencies', tomlkit.table())
+
+        if not config['project'].get('authors', None):
+            config['project']['authors'] = []
+            config['project']['authors'].append({'name': getpass.getuser(), 'email': ''})
+
+        if not (
+            config['project'].get('optional-dependencies', None)
+            and isinstance(config['project']['optional-dependencies'], dict)
+        ):
+            config['project']['optional-dependencies'] = tomlkit.table()
 
         return config
 
@@ -75,7 +90,7 @@ class Project:
 
     def _gen_pyproject(self):
         with atomic_write(os.path.join(self.root, PYPROJECT_FILE), overwrite=True) as p:
-            tomlkit.dump(self.config, p)
+            p.write(tomlkit.dumps(self.config).replace('"', '\''))
         yield f'    {PYPROJECT_FILE} refreshed'
 
     def _gen_readme(self):
@@ -104,6 +119,17 @@ class Project:
             p.write(GITIGNORE_TPL)
         yield f'    {GITIGNORE_FILE} created'
 
+    def _gen_vscode(self):
+        yield from create_dir(self.root, VSCODE_DIR)
+        with atomic_write(
+            os.path.join(self.root, VSCODE_DIR, VSCODE_FILE), overwrite=False
+        ) as p:
+            if not p:
+                yield f'    {VSCODE_FILE} already exists, skipping'
+                return
+            p.write(VSCODE_TPL)
+        yield f'    {VSCODE_FILE} created'
+
     def _gen_requirements(self, data, req_file):
         with atomic_write(os.path.join(self.root, req_file)) as p:
             p.write(data)
@@ -130,7 +156,7 @@ class Project:
             'requires-python'
         ] = f'>={re.match(REQUIRES_PYTHON_REGEX, self.python)[1]}'
 
-    def create_structure(self):
+    def create_structure(self, ide):
         yield f'Preparing project directories: {SRC_DIR} {TEST_DIR}'
         yield from create_dir(self.root, SRC_DIR)
         yield from create_dir(self.root, TEST_DIR)
@@ -140,6 +166,8 @@ class Project:
         yield from self._gen_readme()
         yield from self._gen_license()
         yield from self._gen_gitignore()
+        if ide:
+            yield from self._gen_vscode()
 
     def install(self, packages, group=None):
         for k in packages:

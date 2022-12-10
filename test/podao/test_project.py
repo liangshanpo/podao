@@ -12,6 +12,8 @@ from podao.constant import (
     REQUIREMENTS_FILE,
     SRC_DIR,
     TEST_DIR,
+    VSCODE_DIR,
+    VSCODE_FILE,
 )
 from podao.main import Package, Project
 
@@ -50,7 +52,7 @@ def test_create_venv(project):
 
 @pytest.mark.depends(on=['test_create_venv'])
 def test_create_structure(project):
-    for s in project.create_structure():
+    for s in project.create_structure('vscode'):
         print(s)
     assert os.path.exists(os.path.join(project.root, SRC_DIR))
     assert os.path.exists(os.path.join(project.root, TEST_DIR))
@@ -58,6 +60,8 @@ def test_create_structure(project):
     assert os.path.exists(os.path.join(project.root, LICENSE_FILE))
     assert os.path.exists(os.path.join(project.root, GITIGNORE_FILE))
     assert os.path.exists(os.path.join(project.root, PYPROJECT_FILE))
+    assert os.path.exists(os.path.join(project.root, VSCODE_DIR))
+    assert os.path.exists(os.path.join(project.root, VSCODE_DIR, VSCODE_FILE))
 
 
 @pytest.mark.depends(on=['test_create_structure'])

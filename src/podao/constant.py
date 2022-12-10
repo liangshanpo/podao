@@ -1,11 +1,13 @@
 SRC_DIR = 'src'
 TEST_DIR = 'test'
+VSCODE_DIR = '.vscode'
 
 README_FILE = 'README.md'
 LICENSE_FILE = 'LICENSE'
 GITIGNORE_FILE = '.gitignore'
 PYPROJECT_FILE = 'pyproject.toml'
 REQUIREMENTS_FILE = 'requirements{group}.txt'
+VSCODE_FILE = 'settings.json'
 
 ALL_GROUP_NAME = 'all'
 
@@ -83,4 +85,27 @@ keywords = []
 classifiers = []
 dependencies = []
 [project.optional-dependencies]
+'''
+
+VSCODE_TPL = '''\
+{
+    "files.exclude": {
+        ".vscode": true,
+        ".python-version": true,
+        ".gitignore": true,
+        "pyvenv.cfg": true,
+        "**/.pytest_cache": true,
+        "**/*.egg-info": true,
+        "**/__pycache__": true,
+        "**/.git": true
+    },
+    "python.formatting.provider": "black",
+    "python.formatting.blackArgs": [
+        "--skip-string-normalization"
+    ],
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": true
+    }
+}
 '''

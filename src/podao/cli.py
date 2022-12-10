@@ -5,6 +5,13 @@ from podao.main import Project
 from podao.util import check_pyenv, check_pyvenv
 
 
+'''
+TODO: 
+    1. src/<package>
+    2. .vscode/settings.json, --editor / --ide
+'''
+
+
 @click.group
 def pd():
     pass
@@ -13,7 +20,13 @@ def pd():
 @pd.command
 @click.argument('dir', nargs=1)
 @click.argument('python', nargs=1, required=False)
-def init(dir, python):
+@click.option(
+    '-ide',
+    '-i',
+    type=click.Choice(['vscode'], case_sensitive=False),
+    help='Generate IDE configuation file.',
+)
+def init(dir, python, ide=None):
     '''
     Init project enviorment. E.g.\n
     pd init . 3.10.4
@@ -33,7 +46,7 @@ def init(dir, python):
         for s in pro.create_venv(python):
             click.secho(s)
 
-        for s in pro.create_structure():
+        for s in pro.create_structure(ide):
             click.secho(s)
     except Exception as e:
         click.secho(e, fg='red', err=True)

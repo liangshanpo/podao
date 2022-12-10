@@ -52,6 +52,21 @@ pip install podao
 ```
 
 
+一般将 podao 安装在系统环境，也可以安装在虚拟环境：
+
+#### 安装在系统环境
+1. 切换到项目路径
+2. 执行 `podao init .`
+
+#### 安装在虚拟环境
+1. 激活安装有 podao 的虚拟环境
+2. 切换到项目路径
+3. 执行 `podao init .`
+4. 退出安装有 podao 的虚拟环境 `deactivate`
+5. 激活项目虚拟环境 `source bin/activate`
+
+
+
 
 ### 示例 examples
 
@@ -84,10 +99,11 @@ pd freeze -g pdf
 
 
 ### 使用 usage
-#### pd init dir [python]
+#### pd init dir [python] [-ide]
 `pd init` 命令使用 dir 目录和 python 版本创建虚拟环境，包括 src、test、pyproject.toml、LICENSE、README.md和.gitignore。使用目录名作为项目名、当前系统用户作为author、MIT 为默认 LICENSE、当前年份和系统用户作为 LICENSE 时间和用户。
 - `dir` - 项目目录，必填项，使用 `.` 表示当前目录
 - `python` - python 版本号，如果不指定 python，则使用当前系统安装的最高版本的python
+- `-ide` - 如果指定 IDE 会生成 IDE 的配置文件，目前仅支持 vscode
 
 
 
